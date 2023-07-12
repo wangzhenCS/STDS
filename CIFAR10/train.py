@@ -68,47 +68,7 @@ def main(args):
 
     if not os.path.exists(model_dir):
         os.makedirs(model_dir)
-'''
-    # Data augmentation
-    transform_train = transforms.Compose([
-        transforms.RandomCrop(32, padding=4),
-        transforms.RandomHorizontalFlip(),
-        transforms.ToTensor(),
-        transforms.Normalize((0.4914, 0.4822, 0.4465),
-                             (0.2023, 0.1994, 0.2010)),
-    ])
-    transform_test = transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize((0.4914, 0.4822, 0.4465),
-                             (0.2023, 0.1994, 0.2010)),
-    ])
 
-    train_dataset = torchvision.datasets.CIFAR10(
-        root=dataset_dir,
-        train=True,
-        transform=transform_train,
-        download=True)
-    test_dataset = torchvision.datasets.CIFAR10(
-        root=dataset_dir,
-        train=False,
-        transform=transform_test,
-        download=True)
-
-    train_data_loader = torch.utils.data.DataLoader(
-        dataset=train_dataset,
-        batch_size=batch_size,
-        shuffle=True,
-        drop_last=True, 
-        num_workers=4,
-        pin_memory=True)
-    test_data_loader = torch.utils.data.DataLoader(
-        dataset=test_dataset,
-        batch_size=batch_size,
-        shuffle=False,
-        drop_last=False, 
-        num_workers=4,
-        pin_memory=True)
-'''
     # 加载实验数据集
     transform = transforms.Compose(
         [transforms.Grayscale(),# 转成单通道的灰度图
