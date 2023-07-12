@@ -20,6 +20,7 @@ import math
 # from tqdm import tqdm
 
 import model
+import random
 
 ############## Reproducibility ##############
 _seed_ = 2020
@@ -40,14 +41,14 @@ def main(args):
 
     # os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 
-    batch_size = args.batch_size
+    batch_size = 40
     learning_rate = args.lr
     dataset_dir = args.dataset_dir
     dump_dir = args.dump_dir
     T = args.T
     test = args.test
     i1 = args.interval_test
-    N = args.epoch
+    N = 50
 
     file_prefix = 'lr-' + np.format_float_scientific(learning_rate, exp_digits=1, trim='-') + f'-b-{batch_size}-T-{T}'
 
@@ -67,7 +68,7 @@ def main(args):
 
     if not os.path.exists(model_dir):
         os.makedirs(model_dir)
-
+'''
     # Data augmentation
     transform_train = transforms.Compose([
         transforms.RandomCrop(32, padding=4),
@@ -107,6 +108,29 @@ def main(args):
         drop_last=False, 
         num_workers=4,
         pin_memory=True)
+'''
+    # 加载实验数据集
+    transform = transforms.Compose(
+        [transforms.Grayscale(),# 转成单通道的灰度图
+        # 把值转成Tensor
+        transforms.ToTensor()])
+
+    dataset = torchvision.datasets.ImageFolder("/kaggle/input/ddos-2019/Dataset-4/Dataset-4", 
+                                                transform=transform)
+
+    # 切分，训练集和验证集
+    random.seed(0)
+    indices = list(range(len(dataset)))
+    random.shuffle(indices)
+    split_point = int(0.8*len(indices))
+    train_indices = indices[:split_point]
+    test_indices = indices[split_point:]
+
+    train_data_loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size,
+                          sampler=torch.utils.data.SubsetRandomSampler(train_indices))
+
+    test_data_loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size,
+                         sampler=torch.utils.data.SubsetRandomSampler(test_indices))
 
     total_train_step = len(train_data_loader) * N
 
