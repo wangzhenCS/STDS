@@ -97,7 +97,7 @@ class CIFAR10Net(nn.Module):
     def __init__(self, channels=256, single_step_neuron: callable = None, **kwargs):
         super().__init__()
 
-        self.conv1 = conv3x3(3, channels)
+        self.conv1 = conv3x3(1, channels)
         self.bn1 = nn.BatchNorm2d(channels)
         self.sn1 = single_step_neuron(**kwargs)
 
