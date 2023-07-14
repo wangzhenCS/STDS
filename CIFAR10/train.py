@@ -264,7 +264,9 @@ def main(args):
 
             if net.epochs > N:
                 break
-
+        PATH = '/kaggle/working/model-2-STDS.pt'
+        torch.save(net, PATH)
+        print('saved model!')
 
 def parse_args():
     import argparse
