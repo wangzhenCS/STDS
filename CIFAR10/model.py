@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from spikingjelly.clock_driven import functional, layer
-__all__ = ['MultiStepCIFAR10Net', 'PConv']
+#__all__ = ['MultiStepCIFAR10Net', 'PConv']
 
 from train import args as parser_args
 
