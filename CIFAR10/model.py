@@ -2,9 +2,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from spikingjelly.clock_driven import functional, layer
-#__all__ = ['MultiStepCIFAR10Net', 'PConv']
+__all__ = ['MultiStepCIFAR10Net', 'PConv']
 
-from train import args as parser_args
+
 
 class PseudoRelu(torch.autograd.Function):
     @staticmethod
@@ -36,8 +36,11 @@ class PConv(nn.Conv2d):
         super().__init__(*args, **kwargs)
 
         with torch.no_grad():
+            self.mapping = lambda x: x
+            '''
             if parser_args.sparse_function == 'identity':
                 self.mapping = lambda x: x
+
             elif parser_args.sparse_function == 'st':
                 if parser_args.gradual is None:
                     self.mapping = lambda x: softThreshold(x, parser_args.flat_width)
@@ -48,6 +51,7 @@ class PConv(nn.Conv2d):
                     self.mapping = lambda x: softThresholdmod(x, parser_args.flat_width)
                 else:
                     self.mapping = lambda x: x
+            '''
 
     
     def forward(self, x):      
@@ -69,10 +73,12 @@ class PConv(nn.Conv2d):
         
     @torch.no_grad()
     def setFlatWidth(self, width):
+        '''
         if parser_args.sparse_function == 'st':
             self.mapping = lambda x: softThreshold(x, width)
         elif parser_args.sparse_function == 'stmod':
             self.mapping = lambda x: softThresholdmod(x, width)
+        '''
         
 def conv3x3(in_planes, out_planes, stride=1, groups=1, dilation=1):
     """3x3 convolution with padding"""
