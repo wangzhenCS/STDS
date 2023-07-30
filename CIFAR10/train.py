@@ -40,6 +40,11 @@ def linearInc(n, N):
 def main(args):
 
     # os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
+    # 按照当前环境切换GPU和CPU
+    use_gpu = False
+    if torch.cuda.is_available():
+        use_gpu = True
+    device = torch.device("cuda" if use_gpu else "cpu")
 
     batch_size = 40
     learning_rate = args.lr
@@ -95,7 +100,9 @@ def main(args):
     total_train_step = len(train_data_loader) * N
 
     # Load existing model or create a new one
-    net = model.__dict__['MultiStepCIFAR10Net'](multi_step_neuron=MultiStepLIFNode, tau=2.0, detach_reset=True, surrogate_function=surrogate.ATan(), backend='cupy').cuda()
+    net = model.__dict__['MultiStepCIFAR10Net'](multi_step_neuron=MultiStepLIFNode, 
+                                                tau=2.0, detach_reset=True, surrogate_function=surrogate.ATan(), 
+                                                backend='torch').to(device)
 
     if args.alpha_gr == 0:
         optimizer = Adam(net.parameters(), lr=learning_rate)
@@ -133,8 +140,8 @@ def main(args):
             test_sum = 0
             correct_sum = 0
             for img, label in test_data_loader:
-                img = img.cuda(non_blocking=True)
-                label = label.cuda(non_blocking=True)
+                img = img.to(device)
+                label = label.to(device)
 
                 output = net(img, T).mean(0)
 
@@ -167,8 +174,8 @@ def main(args):
 
             time_start = time.time()
             for img, label in train_data_loader:
-                img = img.cuda(non_blocking=True)
-                label = label.cuda(non_blocking=True)
+                img = img.to(device)
+                label = label.to(device)
 
                 optimizer.zero_grad()
 
@@ -214,8 +221,8 @@ def main(args):
                 test_sum = 0
                 correct_sum = 0
                 for img, label in test_data_loader:
-                    img = img.cuda(non_blocking=True)
-                    label = label.cuda(non_blocking=True)
+                    img = img.to(device)
+                    label = label.to(device)
 
                     output = net(img, T).mean(0)
 
