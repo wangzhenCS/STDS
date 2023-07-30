@@ -181,7 +181,7 @@ class CIFAR10Net(nn.Module):
         return x
 
 class MultiStepCIFAR10Net(CIFAR10Net):
-    def __init__(self, channels=256, multi_step_neuron: callable = None, **kwargs):
+    def __init__(self, channels=32, multi_step_neuron: callable = None, **kwargs):
         super().__init__(channels, multi_step_neuron, **kwargs)
         del self.dp7, self.dp8
         self.dp7 = layer.MultiStepDropout(0.5)
