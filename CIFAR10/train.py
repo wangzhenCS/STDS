@@ -158,7 +158,7 @@ def main(args):
         criterion = nn.MSELoss()
         
         # Training Loop
-        for _ in range(N + 1):
+        for epoch in range(N + 1):
             net.train()
             print(f'Epoch {net.epochs}, {file_prefix}')
             train_sum = 0
@@ -230,7 +230,7 @@ def main(args):
                 if net.epochs % i1 == 0:
                     torch.save(net.state_dict(), os.path.join(model_dir, f'model-{net.epochs}.pth'))
 
-                torch.save(net, '/kaggle/working/model-test.pt')
+                torch.save(net, '/kaggle/working/model-test'+str(epoch)+'.pt')
 
             net.epochs += 1
             
