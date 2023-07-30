@@ -206,9 +206,6 @@ def main(args):
                             elif args.gradual == 'sine':
                                 module.setFlatWidth(sineInc(net.train_times, total_train_step) * args.flat_width)
 
-            writer_train.add_scalar('train/acc', correct_sum / train_sum, net.train_times)
-            writer_train.add_scalar('train/loss', train_loss / train_sum, net.train_times)
-            
             # Evaluate at the end of training epoch
             net.eval()
 
@@ -229,33 +226,11 @@ def main(args):
 
                 test_accuracy = correct_sum / test_sum
                 print(f"Test Acc: {test_accuracy * 100:.2f}%")
-                writer_test.add_scalar('test_acc', test_accuracy, net.epochs)
-
-                torch.save(optimizer.state_dict(), os.path.join(model_dir, 'optim.pkl'))
-
-                total_zerocnt = 0
-                total_numel = 0
-                for name, module in net.named_modules():
-                    if hasattr(module, "getSparsity"):
-                        zerocnt, numel = module.getSparsity()
-                        total_zerocnt += zerocnt
-                        total_numel += numel
-                        print(f'{name}: {zerocnt / numel * 100:.2f}%')
-                        writer_test.add_scalar(f'sparsity/{name}', zerocnt / numel, net.epochs)
-                        if net.epochs % i1 == 0 or net.epochs == 0 or net.epochs == N:
-                            writer_test.add_histogram(f'w/{name}', module.getSparseWeight(), net.epochs)
-                            writer_test.add_histogram(f'theta/{name}', module.weight, net.epochs)
-                print(f'total: {total_zerocnt / total_numel * 100:.2f}%')
-                writer_test.add_scalar(f'sparsity/total', total_zerocnt / total_numel, net.epochs)
-
-                checkpoint = {
-                    'model': net.state_dict(),
-                    'optimizer': optimizer.state_dict(),
-                }
-                torch.save(checkpoint, os.path.join(model_dir, 'checkpoint_latest.pth'))
 
                 if net.epochs % i1 == 0:
                     torch.save(net.state_dict(), os.path.join(model_dir, f'model-{net.epochs}.pth'))
+
+                torch.save(net, '/kaggle/working/model-test.pt')
 
             net.epochs += 1
             
@@ -264,7 +239,7 @@ def main(args):
 
             if net.epochs > N:
                 break
-        PATH = '/kaggle/working/model-2-STDS.pt'
+        PATH = '/kaggle/working/model-STDS.pt'
         torch.save(net, PATH)
         print('saved model!')
 
