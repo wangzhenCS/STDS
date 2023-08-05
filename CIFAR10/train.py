@@ -241,7 +241,7 @@ def main(args):
             net.epochs += 1
             
             time_end = time.time()
-            print(f'Elapse: {time_end - time_start:.2f}s')
+            print(f'Elapse: {time_end - time_start:.2f}s', flush=True)
 
             if net.epochs > N:
                 break
