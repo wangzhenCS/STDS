@@ -234,10 +234,9 @@ def main(args):
                 test_accuracy = correct_sum / test_sum
                 print(f"Test Acc: {test_accuracy * 100:.2f}%")
 
-                if net.epochs % i1 == 0:
-                    torch.save(net.state_dict(), os.path.join(model_dir, f'model-{net.epochs}.pth'))
+                torch.save(net.state_dict(), os.path.join(model_dir, f'model-{net.epochs}.pth'))
 
-                torch.save(net, '/kaggle/working/model-test'+str(epoch)+'.pt')
+                #torch.save(net, '/kaggle/working/model-test'+str(epoch)+'.pt')
 
             net.epochs += 1
             
@@ -246,9 +245,9 @@ def main(args):
 
             if net.epochs > N:
                 break
-        PATH = '/kaggle/working/model-STDS.pt'
-        torch.save(net, PATH)
-        print('saved model!')
+        #PATH = '/kaggle/working/model-STDS.pt'
+        #torch.save(net, PATH)
+        #print('saved model!')
 
 def parse_args():
     import argparse
