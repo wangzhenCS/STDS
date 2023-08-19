@@ -242,7 +242,7 @@ def main(args):
                 test_accuracy = correct_sum / test_sum
                 print(f"Test Acc: {test_accuracy * 100:.2f}%")
 
-                #torch.save(net.state_dict(), os.path.join(model_dir, f'model-{net.epochs}.pth'))
+                torch.save(net.state_dict(), os.path.join(model_dir, f'model-{net.epochs}.pth'))
 
                 #torch.save(net, '/kaggle/working/model-test'+str(epoch)+'.pt')
 
