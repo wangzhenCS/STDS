@@ -80,10 +80,10 @@ def main(args):
         # 把值转成Tensor
         transforms.ToTensor()])
 
-    #dataset = torchvision.datasets.ImageFolder("/kaggle/input/ddos-2019/Dataset-4/Dataset-4", 
-    #                                            transform=transform)
-    dataset = torchvision.datasets.ImageFolder("/kaggle/input/cse-cic-ids2018-for-snn", 
+    dataset = torchvision.datasets.ImageFolder("/kaggle/input/ddos-2019/Dataset-4/Dataset-4", 
                                                 transform=transform)
+    #dataset = torchvision.datasets.ImageFolder("/kaggle/input/cse-cic-ids2018-for-snn", 
+    #                                            transform=transform)
     #dataset = torchvision.datasets.ImageFolder("/kaggle/input/nsl-kdd-for-snn/data", 
     #                                            transform=transform)
 
@@ -147,7 +147,8 @@ def main(args):
                 img = img.to(device)
                 label = label.to(device)
 
-                output = net(img, T).mean(0)
+                #output = net(img, T).mean(0)
+                output = net(img).mean(0)
 
                 correct_sum += (output.argmax(dim=1) == label).float().sum().item()
                 test_sum += label.numel()
@@ -187,13 +188,15 @@ def main(args):
 
                 if scaler is not None:
                     with amp.autocast():    
-                        output = net(img, T).mean(0)
+                        #output = net(img, T).mean(0)
+                        output = net(img).mean(0)
                         loss = criterion(output, binary_label)
                     scaler.scale(loss).backward()
                     scaler.step(optimizer)
                     scaler.update()
                 else:
-                    output = net(img, T).mean(0)
+                    #output = net(img, T).mean(0)
+                    output = net(img).mean(0)
                     # print(output.shape, binary_label.shape)
                     # exit(0)
                     loss = criterion(output, binary_label)
@@ -228,7 +231,8 @@ def main(args):
                     img = img.to(device)
                     label = label.to(device)
 
-                    output = net(img, T).mean(0)
+                    #output = net(img, T).mean(0)
+                    output = net(img).mean(0)
 
                     correct_sum += (output.argmax(dim=1) == label).float().sum().item()
                     test_sum += label.numel()
