@@ -191,7 +191,8 @@ class MultiStepCIFAR10Net(CIFAR10Net):
         self.epochs = 0
 
 
-    def forward(self, x: torch.Tensor, T: int):
+    def forward(self, x: torch.Tensor):
+        T = 8
         x = self.conv1(x)
         x = self.bn1(x)
         x.unsqueeze_(0)
