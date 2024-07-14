@@ -80,7 +80,7 @@ def main(args):
         # 把值转成Tensor
         transforms.ToTensor()])
 
-    dataset = torchvision.datasets.ImageFolder("/kaggle/input/ddos-2019/Dataset-4/Dataset-4", 
+    dataset = torchvision.datasets.ImageFolder("/kaggle/input/thesis-iomt2024/thesis", 
                                                 transform=transform)
     #dataset = torchvision.datasets.ImageFolder("/kaggle/input/cse-cic-ids2018-for-snn", 
     #                                            transform=transform)
@@ -253,9 +253,9 @@ def main(args):
 
             if net.epochs > N:
                 break
-        #PATH = '/kaggle/working/model-STDS.pt'
-        #torch.save(net, PATH)
-        #print('saved model!')
+        PATH = '/kaggle/working/model-iomt2024.pt'
+        torch.save(net, PATH)
+        print('saved model!')
 
 def parse_args():
     import argparse
