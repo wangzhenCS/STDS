@@ -183,8 +183,8 @@ def main(args):
                 label = label.to(device)
 
                 optimizer.zero_grad()
-
-                binary_label = F.one_hot(label, num_classes=10).float()
+                # 更新分类数量
+                binary_label = F.one_hot(label, num_classes=6).float()
 
                 if scaler is not None:
                     with amp.autocast():    
